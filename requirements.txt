@@ -4,8 +4,11 @@ async-timeout==3.0.1
 attrs==19.3.0
 cffi==1.14.0
 chardet==3.0.4
+decorator==4.4.2
 idna==2.9
 multidict==4.7.6
 pycares==3.1.1
 pycparser==2.20
+six==1.15.0
+validators==0.15.0
 yarl==1.4.2
