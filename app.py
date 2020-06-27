@@ -7,12 +7,12 @@ import aiohttp.client_exceptions
 from validators import url as url_validator
 
 
-async def measure_response_time(session: aiohttp.ClientSession, url: str):
+async def measure_response_time(session, url):
     """
     Fetching an url by performing GET request. Measure the response time.
-    :param session: All requests in one session, for connection pooling.
-    :param url: Full URL for request.
-    :return: Dict containing measurements info. For example:
+    :param aiohttp.ClientSession session: All requests in one session, for connection pooling.
+    :param str url: Full URL for request.
+    :return dict: Dict containing measurements info. For example:
             {
                 "url": "https://google.com",
                 "status_code": 200,
@@ -55,7 +55,6 @@ async def main(request_body):
             response_data["errors"].append(measurement_result)
         else:
             response_data["results"].append(measurement_result)
-
     return {
         "statusCode": HTTPStatus.OK,
         "body": json.dumps(response_data),
