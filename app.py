@@ -1,4 +1,5 @@
 import asyncio
+from http import HTTPStatus
 import json
 
 import aiohttp
@@ -33,9 +34,15 @@ async def main(request_body):
     try:
         request_urls = json.loads(request_body)
     except json.decoder.JSONDecodeError:
-        return {"statusCode": 422, "body": "Bad json payload"}
+        return {
+            "statusCode": HTTPStatus.UNPROCESSABLE_ENTITY,
+            "body": "Bad json payload",
+        }
     if not all(map(url_validator, request_urls)):
-        return {"statusCode": 422, "body": "Not a valid URL in payload."}
+        return {
+            "statusCode": HTTPStatus.UNPROCESSABLE_ENTITY,
+            "body": "Not a valid URL in payload.",
+        }
     urls_to_measure = []
     async with aiohttp.ClientSession(cookie_jar=aiohttp.DummyCookieJar()) as session:
         for url in request_urls:
@@ -49,7 +56,11 @@ async def main(request_body):
         else:
             response_data["results"].append(measurement_result)
 
-    return {"statusCode": 200, "body": json.dumps(response_data)}
+    return {
+        "statusCode": HTTPStatus.OK,
+        "body": json.dumps(response_data),
+        "headers": {"Content-Type": "application/json"},
+    }
 
 
 def handler(event, context):
