@@ -41,16 +41,10 @@ async def main(request_body):
         for url in request_urls:
             measure_data = measure_response_time(session, url)
             urls_to_measure.append(measure_data)
-        measurements_results = await asyncio.gather(
-            *urls_to_measure, return_exceptions=True
-        )
+        measurements_results = await asyncio.gather(*urls_to_measure)
     response_data = {"results": [], "errors": []}
     for original_url, measurement_result in zip(request_urls, measurements_results):
-        if isinstance(measurement_result, BaseException):
-            response_data["errors"].append(
-                {"url": original_url, "status_code": None, "time": None}
-            )
-        elif measurement_result["status_code"] is None:
+        if measurement_result["status_code"] is None:
             response_data["errors"].append(measurement_result)
         else:
             response_data["results"].append(measurement_result)
