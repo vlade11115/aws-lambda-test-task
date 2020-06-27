@@ -1,0 +1,21 @@
+org: vlade11115
+app: task01-app
+service: task-01
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  runtime: python3.8
+
+functions:
+  task:
+    handler: app.handler
+    events:
+      - http: POST /
+      - http: 'POST {proxy+}'
